@@ -27,16 +27,27 @@ function createPlayer(name, symbol) {
   return { playerName, getSymbol };
 }
 
-// Create cell with corresponding symbol value
-// function Cell() {
-//   let value = 0;
+const checkBoard = (function () {
+  const checkRow = (row) => row.every((v) => v === row[0]);
 
-//   const setValue = (symbol) => {
-//     symbol === 'X' ? (value = 1) : (value = 2);
-//   };
+  return { checkRow };
+})();
 
-//   return {};
-// }
+const gameState = (function () {
+  let win = false;
+
+  const gameOver = (board) => {
+    for (let i = 0; i < 3; i++) {
+      if (!board[i].includes(0)) {
+        console.log(board[i]);
+        win = checkBoard.checkRow(board[i]);
+      }
+    }
+    return win;
+  };
+
+  return { gameOver };
+})();
 
 // Create function that plays a round the game
 const playRound = (function () {
@@ -50,24 +61,28 @@ const playRound = (function () {
     }
   };
 
-  console.log(board);
-
   return { setSymbol };
 })();
 
 // Create function to control state of the game
 function gameController() {
   let players = [];
+  const board = Gameboard.getBoard();
 
   const playerOne = createPlayer('one', 'X');
+  const playerOneSymbol = playerOne.getSymbol();
+
   const playerTwo = createPlayer('two', 'O');
+  const playerTwoSymbol = playerTwo.getSymbol();
 
   players.push(playerOne, playerTwo);
 
-  playRound.setSymbol(1, 1, playerTwo.getSymbol());
-  playRound.setSymbol(1, 2, playerOne.getSymbol());
+  playRound.setSymbol(1, 1, playerTwoSymbol);
+  playRound.setSymbol(1, 2, playerOneSymbol);
+  playRound.setSymbol(1, 0, playerTwoSymbol);
 
-  console.log(players);
+  console.log(gameState.gameOver(board));
+  console.log(board);
 }
 
 gameController();
