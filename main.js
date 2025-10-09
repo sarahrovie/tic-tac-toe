@@ -27,27 +27,31 @@ function createPlayer(name, symbol) {
   return { playerName, getSymbol };
 }
 
-const checkBoard = (function () {
+const checkWin = (function () {
+  // Check if a row has the same elements
   const checkRow = (row) => row.every((v) => v === row[0]);
 
   return { checkRow };
 })();
 
-const gameState = (function () {
-  let win = false;
+function gameState(board) {
+  let gameOver = false;
 
-  const gameOver = (board) => {
-    for (let i = 0; i < 3; i++) {
-      if (!board[i].includes(0)) {
-        console.log(board[i]);
-        win = checkBoard.checkRow(board[i]);
-      }
+  for (let i = 0; i < 3; i++) {
+    if (!board[i].includes(0)) {
+      gameOver = checkWin.checkRow(board[i]);
     }
-    return win;
-  };
 
-  return { gameOver };
-})();
+    if (gameOver === true) {
+      console.log('Game over!');
+      break;
+    }
+  }
+
+  const getState = () => gameOver;
+
+  return { getState };
+}
 
 // Create function that plays a round the game
 const playRound = (function () {
@@ -80,9 +84,12 @@ function gameController() {
   playRound.setSymbol(1, 1, playerTwoSymbol);
   playRound.setSymbol(1, 2, playerOneSymbol);
   playRound.setSymbol(1, 0, playerTwoSymbol);
+  playRound.setSymbol(2, 1, playerTwoSymbol);
+  playRound.setSymbol(2, 2, playerTwoSymbol);
+  playRound.setSymbol(2, 0, playerTwoSymbol);
 
-  console.log(gameState.gameOver(board));
   console.log(board);
+  const checkGame = gameState(board);
 }
 
 gameController();
