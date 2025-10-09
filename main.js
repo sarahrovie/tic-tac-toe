@@ -28,32 +28,32 @@ function createPlayer(name, symbol) {
 }
 
 // Create cell with corresponding symbol value
-// function createPlayer(symbol) {
+// function Cell() {
 //   let value = 0;
 
-//   const checkSymbol = () => {
-//     if (symbol === 'X') {
-//       value = 1;
-//     }
+//   const setValue = (symbol) => {
+//     symbol === 'X' ? (value = 1) : (value = 2);
 //   };
 
 //   return {};
 // }
 
-function playRound() {
+// Create function that plays a round the game
+const playRound = (function () {
   const board = Gameboard.getBoard();
 
-  const setToken = (row, column, token) => {
+  const setSymbol = (row, column, symbol) => {
     if (board[row][column] === 0) {
-      board[row][column] = token;
-      console.log(board);
+      board[row][column] = symbol;
     } else {
-      console.log('Pick another cell!');
+      console.log('Player already picked that square!');
     }
   };
 
-  return { setToken };
-}
+  console.log(board);
+
+  return { setSymbol };
+})();
 
 // Create function to control state of the game
 function gameController() {
@@ -63,6 +63,9 @@ function gameController() {
   const playerTwo = createPlayer('two', 'O');
 
   players.push(playerOne, playerTwo);
+
+  playRound.setSymbol(1, 1, playerTwo.getSymbol());
+  playRound.setSymbol(1, 2, playerOne.getSymbol());
 
   console.log(players);
 }
