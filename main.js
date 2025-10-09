@@ -17,16 +17,54 @@ const Gameboard = (function () {
   return { getBoard };
 })();
 
-const playGame = (function () {
+// Create player object with corresponding symbol
+function createPlayer(name, symbol) {
+  const playerName = 'Player ' + name;
+  const playerSymbol = symbol;
+
+  const getSymbol = () => playerSymbol;
+
+  return { playerName, getSymbol };
+}
+
+// Create cell with corresponding symbol value
+// function createPlayer(symbol) {
+//   let value = 0;
+
+//   const checkSymbol = () => {
+//     if (symbol === 'X') {
+//       value = 1;
+//     }
+//   };
+
+//   return {};
+// }
+
+function playRound() {
   const board = Gameboard.getBoard();
 
   const setToken = (row, column, token) => {
-    board[row][column] = token;
+    if (board[row][column] === 0) {
+      board[row][column] = token;
+      console.log(board);
+    } else {
+      console.log('Pick another cell!');
+    }
   };
 
   return { setToken };
-})();
+}
 
-playGame.setToken(0, 0, 'x');
-playGame.setToken(0, 1, 'o');
-console.log(Gameboard.getBoard());
+// Create function to control state of the game
+function gameController() {
+  let players = [];
+
+  const playerOne = createPlayer('one', 'X');
+  const playerTwo = createPlayer('two', 'O');
+
+  players.push(playerOne, playerTwo);
+
+  console.log(players);
+}
+
+gameController();
