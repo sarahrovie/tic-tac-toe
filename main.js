@@ -8,7 +8,7 @@ const Gameboard = (function () {
   for (let i = 0; i < rows; i++) {
     board[i] = [];
     for (let j = 0; j < columns; j++) {
-      board[i][j] = j;
+      board[i][j] = 0;
     }
   }
 
@@ -17,4 +17,16 @@ const Gameboard = (function () {
   return { getBoard };
 })();
 
+const playGame = (function () {
+  const board = Gameboard.getBoard();
+
+  const setToken = (row, column, token) => {
+    board[row][column] = token;
+  };
+
+  return { setToken };
+})();
+
+playGame.setToken(0, 0, 'x');
+playGame.setToken(0, 1, 'o');
 console.log(Gameboard.getBoard());
