@@ -27,11 +27,13 @@ function createPlayer(name, symbol) {
   return { playerName, getSymbol };
 }
 
-const checkWin = (function () {
-  // Check if a row has the same elements
+const checkBoard = (function () {
+  // Check if a row has a match
   const checkRow = (row) => row.every((v) => v === row[0]);
+  // Check if a column has a match
+  const checkColumn = (row1, row2, j) => row1[j] === row2[j];
 
-  return { checkRow };
+  return { checkRow, checkColumn };
 })();
 
 function gameState(board) {
@@ -39,13 +41,29 @@ function gameState(board) {
 
   for (let i = 0; i < 3; i++) {
     if (!board[i].includes(0)) {
-      gameOver = checkWin.checkRow(board[i]);
+      gameOver = checkBoard.checkRow(board[i]);
     }
+  }
 
-    if (gameOver === true) {
-      console.log('Game over!');
-      break;
+  for (let i = 0; i < 2; i++) {
+    if (!board[i].every((v) => v === 0)) {
+      let count = 0;
+      for (let j = 0; j < 3; j++) {
+        if (checkBoard.checkColumn(board[i], board[i + 1], j)) {
+          count++;
+          //   console.log(board[i][j], board[i + 1][j], count);
+        }
+
+        if (count === 2) {
+          gameOver = true;
+          count = 0;
+        }
+      }
     }
+  }
+
+  if (gameOver === true) {
+    console.log('Game over!', gameOver);
   }
 
   const getState = () => gameOver;
@@ -81,12 +99,9 @@ function gameController() {
 
   players.push(playerOne, playerTwo);
 
-  playRound.setSymbol(1, 1, playerTwoSymbol);
-  playRound.setSymbol(1, 2, playerOneSymbol);
-  playRound.setSymbol(1, 0, playerTwoSymbol);
-  playRound.setSymbol(2, 1, playerTwoSymbol);
-  playRound.setSymbol(2, 2, playerTwoSymbol);
-  playRound.setSymbol(2, 0, playerTwoSymbol);
+  playRound.setSymbol(0, 0, playerTwoSymbol);
+  playRound.setSymbol(0, 1, playerTwoSymbol);
+  playRound.setSymbol(0, 2, playerTwoSymbol);
 
   console.log(board);
   const checkGame = gameState(board);
