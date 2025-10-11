@@ -50,12 +50,20 @@ function gameState(board) {
 
   // Check for row match on every row
   for (let i = 0; i < 3; i++) {
+    if (gameOver) {
+      break;
+    }
+
     if (!board[i].includes(0)) {
       gameOver = checkBoard.checkRow(board[i]);
     }
   }
 
   for (let i = 0; i < 2; i++) {
+    if (gameOver) {
+      break;
+    }
+
     for (let j = 0; j < 3; j++) {
       // Check for diagonal match
       if (board[i][j] !== 0) {
@@ -76,10 +84,6 @@ function gameState(board) {
         }
       }
     }
-  }
-
-  if (gameOver === true) {
-    console.log('Game over!', gameOver);
   }
 
   const getState = () => gameOver;
@@ -115,12 +119,16 @@ function gameController() {
 
   players.push(playerOne, playerTwo);
 
-  playRound.setSymbol(0, 2, playerTwoSymbol);
-  playRound.setSymbol(1, 1, playerTwoSymbol);
+  playRound.setSymbol(0, 0, playerTwoSymbol);
+  playRound.setSymbol(1, 0, playerTwoSymbol);
   playRound.setSymbol(2, 0, playerTwoSymbol);
 
   console.log(board);
   const checkGame = gameState(board);
+
+  if (checkGame.getState()) {
+    console.log('Game is over!');
+  }
 }
 
 gameController();
