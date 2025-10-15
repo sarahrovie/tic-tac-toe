@@ -48,6 +48,12 @@ function gameState(board) {
   let gameOver = false;
   let count = 0;
 
+  // Check for ties
+  const isFull = (board) => board.every((row) => !row.includes(0));
+  if (isFull === true && gameOver === false) {
+    console.log("It's a tie!");
+  }
+
   // Check for row match on every row
   for (let i = 0; i < 3; i++) {
     if (gameOver) {
@@ -76,12 +82,7 @@ function gameState(board) {
 
         // Check for column match
         if (checkBoard.checkColumn(board[i], board[i + 1], j)) {
-          count++;
-        }
-
-        if (count === 2) {
-          gameOver = true;
-          break;
+          gameOver = checkBoard.checkColumn(board[i], board[i + 2], j);
         }
       }
     }
@@ -126,9 +127,11 @@ function gameController() {
 
   playRound.setSymbol(0, 0, playerTwoSymbol);
   playRound.setSymbol(0, 1, playerOneSymbol);
-  playRound.setSymbol(1, 0, playerTwoSymbol);
-  playRound.setSymbol(0, 2, playerOneSymbol);
-  // playRound.setSymbol(2, 0, playerTwoSymbol);
+  playRound.setSymbol(0, 2, playerTwoSymbol);
+  playRound.setSymbol(1, 0, playerOneSymbol);
+  playRound.setSymbol(1, 2, playerTwoSymbol);
+  playRound.setSymbol(1, 1, playerOneSymbol);
+  playRound.setSymbol(2, 2, playerTwoSymbol);
 
   console.log(board);
   const checkGame = gameState(board);
