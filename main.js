@@ -138,4 +138,18 @@ function gameController() {
   }
 }
 
+function renderDom() {
+  const board = Gameboard.getBoard();
+  const gridDiv = document.querySelector('#grid');
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      const cellDiv = document.createElement('div');
+      cellDiv.innerHTML = board[i][j] === 0 ? '' : `${board[i][j]}`;
+      gridDiv.appendChild(cellDiv);
+    }
+  }
+}
+
 gameController();
+renderDom();
