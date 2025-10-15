@@ -125,8 +125,10 @@ function gameController() {
   players.push(playerOne, playerTwo);
 
   playRound.setSymbol(0, 0, playerTwoSymbol);
-  // playRound.setSymbol(1, 0, playerTwoSymbol);
-  // playRound.setSymbol(2, 0, playerTwoSymbol);
+  playRound.setSymbol(0, 1, playerOneSymbol);
+  playRound.setSymbol(1, 0, playerTwoSymbol);
+  playRound.setSymbol(0, 2, playerOneSymbol);
+  playRound.setSymbol(2, 0, playerTwoSymbol);
 
   console.log(board);
   const checkGame = gameState(board);
