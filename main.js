@@ -34,9 +34,9 @@ const checkBoard = (function () {
   const checkColumn = (row1, row2, j) => row1[j] === row2[j];
   // Check if a diagonal line has a match
   const checkDiag = (firstRow, middleRow, lastRow) => {
-    if (firstRow[0] === middleRow[1]) {
+    if (firstRow[0] === middleRow[1] && firstRow[0] !== 0) {
       return firstRow[0] === lastRow[2];
-    } else if (firstRow[2] === middleRow[1]) {
+    } else if (firstRow[2] === middleRow[1] && firstRow[2] !== 0) {
       return firstRow[2] === lastRow[0];
     }
   };
@@ -51,6 +51,7 @@ function gameState(board) {
   // Check for row match on every row
   for (let i = 0; i < 3; i++) {
     if (gameOver) {
+      gameOver = false;
       break;
     }
 
@@ -60,11 +61,11 @@ function gameState(board) {
   }
 
   for (let i = 0; i < 2; i++) {
-    if (gameOver) {
-      break;
-    }
-
     for (let j = 0; j < 3; j++) {
+      if (gameOver) {
+        break;
+      }
+
       // Check for diagonal match
       if (board[i][j] !== 0) {
         gameOver = checkBoard.checkDiag(
@@ -94,16 +95,20 @@ function gameState(board) {
 // Create function that plays a round the game
 const playRound = (function () {
   const board = Gameboard.getBoard();
+  let lastPlayer;
 
   const setSymbol = (row, column, symbol) => {
-    if (board[row][column] === 0) {
+    if (board[row][column] === 0 && lastPlayer !== symbol) {
       board[row][column] = symbol;
+      lastPlayer = symbol;
+    } else if (lastPlayer === symbol) {
+      console.log("Next player's turn!");
     } else {
       console.log('Player already picked that square!');
     }
   };
 
-  return { setSymbol };
+  return { setSymbol, lastPlayer };
 })();
 
 // Create function to control state of the game
@@ -120,8 +125,8 @@ function gameController() {
   players.push(playerOne, playerTwo);
 
   playRound.setSymbol(0, 0, playerTwoSymbol);
-  playRound.setSymbol(1, 0, playerTwoSymbol);
-  playRound.setSymbol(2, 0, playerTwoSymbol);
+  // playRound.setSymbol(1, 0, playerTwoSymbol);
+  // playRound.setSymbol(2, 0, playerTwoSymbol);
 
   console.log(board);
   const checkGame = gameState(board);
