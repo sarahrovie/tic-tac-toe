@@ -141,6 +141,8 @@ function gameController() {
   if (checkGame.getState()) {
     console.log('Game is over!');
   }
+
+  renderDom();
 }
 
 function renderDom() {
@@ -158,4 +160,3 @@ function renderDom() {
 }
 
 gameController();
-renderDom();
