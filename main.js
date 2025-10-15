@@ -128,7 +128,7 @@ function gameController() {
   playRound.setSymbol(0, 1, playerOneSymbol);
   playRound.setSymbol(1, 0, playerTwoSymbol);
   playRound.setSymbol(0, 2, playerOneSymbol);
-  playRound.setSymbol(2, 0, playerTwoSymbol);
+  // playRound.setSymbol(2, 0, playerTwoSymbol);
 
   console.log(board);
   const checkGame = gameState(board);
@@ -145,7 +145,8 @@ function renderDom() {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       const cellDiv = document.createElement('div');
-      cellDiv.innerHTML = board[i][j] === 0 ? '' : `${board[i][j]}`;
+      cellDiv.innerHTML = board[i][j] === 0 ? ' ' : `${board[i][j]}`;
+      cellDiv.classList.add('grid-cell');
       gridDiv.appendChild(cellDiv);
     }
   }
