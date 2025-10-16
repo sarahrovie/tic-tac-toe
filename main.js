@@ -142,21 +142,25 @@ function gameController() {
     console.log('Game is over!');
   }
 
-  renderDom();
+  renderDom.renderBoard(board);
 }
 
-function renderDom() {
-  const board = Gameboard.getBoard();
+const renderDom = (function () {
+  // const board = Gameboard.getBoard();
   const gridDiv = document.querySelector('#grid');
 
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      const cellDiv = document.createElement('div');
-      cellDiv.innerHTML = board[i][j] === 0 ? ' ' : `${board[i][j]}`;
-      cellDiv.classList.add('grid-cell');
-      gridDiv.appendChild(cellDiv);
+  const renderBoard = (board) => {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const cellDiv = document.createElement('div');
+        cellDiv.innerHTML = board[i][j] === 0 ? ' ' : `${board[i][j]}`;
+        cellDiv.classList.add('grid-cell');
+        gridDiv.appendChild(cellDiv);
+      }
     }
-  }
-}
+  };
+
+  return { renderBoard };
+})();
 
 gameController();
