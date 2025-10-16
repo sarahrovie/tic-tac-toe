@@ -18,13 +18,12 @@ const Gameboard = (function () {
 })();
 
 // Create player object with corresponding symbol
-function createPlayer(name, symbol) {
-  const playerName = 'Player ' + name;
+function createPlayer(symbol) {
   const playerSymbol = symbol;
 
-  const getSymbol = () => playerSymbol;
+  const getMark = () => playerSymbol;
 
-  return { playerName, getSymbol };
+  return { getMark };
 }
 
 const checkBoard = (function () {
@@ -96,44 +95,34 @@ function gameState(board) {
 // Create function that plays a round the game
 const playRound = (function () {
   const board = Gameboard.getBoard();
-  let lastPlayer;
+  let lastMark;
 
-  const setSymbol = (row, column, symbol) => {
-    if (board[row][column] === 0 && lastPlayer !== symbol) {
-      board[row][column] = symbol;
-      lastPlayer = symbol;
-    } else if (lastPlayer === symbol) {
-      console.log("Next player's turn!");
+  const setMark = (row, column) => {
+    lastMark === 'O' || !lastMark ? (mark = 'X') : (mark = 'O');
+
+    if (board[row][column] === 0) {
+      board[row][column] = mark;
+      lastMark = mark;
     } else {
       console.log('Player already picked that square!');
     }
   };
 
-  return { setSymbol, lastPlayer };
+  return { setMark };
 })();
 
 // Create function to control state of the game
 function gameController() {
-  let players = [];
   const board = Gameboard.getBoard();
 
-  const playerOne = createPlayer('one', 'X');
-  const playerOneSymbol = playerOne.getSymbol();
+  const playerOne = createPlayer('X');
+  const playerTwo = createPlayer('O');
 
-  const playerTwo = createPlayer('two', 'O');
-  const playerTwoSymbol = playerTwo.getSymbol();
-
-  players.push(playerOne, playerTwo);
-
-  playRound.setSymbol(0, 0, playerTwoSymbol);
-  playRound.setSymbol(0, 1, playerOneSymbol);
-  playRound.setSymbol(0, 2, playerTwoSymbol);
-  playRound.setSymbol(1, 0, playerOneSymbol);
-  playRound.setSymbol(1, 2, playerTwoSymbol);
-  playRound.setSymbol(1, 1, playerOneSymbol);
-  playRound.setSymbol(2, 0, playerTwoSymbol);
-  playRound.setSymbol(2, 2, playerOneSymbol);
-  playRound.setSymbol(2, 1, playerTwoSymbol);
+  playRound.setMark(0, 2);
+  playRound.setMark(0, 1);
+  playRound.setMark(1, 1);
+  playRound.setMark(0, 0);
+  playRound.setMark(2, 0);
 
   console.log(board);
   const checkGame = gameState(board);
