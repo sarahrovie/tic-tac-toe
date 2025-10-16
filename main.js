@@ -65,7 +65,7 @@ function gameState(board) {
     }
   }
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     for (let j = 0; j < 3; j++) {
       if (gameOver) {
         break;
@@ -78,11 +78,11 @@ function gameState(board) {
           board[1],
           board[board.length - 1]
         );
+      }
 
-        // Check for column match
-        if (checkBoard.checkColumn(board[i], board[i + 1], j)) {
-          gameOver = checkBoard.checkColumn(board[i], board[i + 2], j);
-        }
+      // Check for column match
+      if (checkBoard.checkColumn(board[i], board[i + 1], j)) {
+        gameOver = checkBoard.checkColumn(board[i], board[i + 2], j);
       }
     }
   }
@@ -103,6 +103,7 @@ const playRound = (function () {
     if (board[row][column] === 0) {
       board[row][column] = mark;
       lastMark = mark;
+      console.log(lastMark);
     } else {
       console.log('Player already picked that square!');
     }
@@ -122,6 +123,9 @@ function gameController() {
   playRound.setMark(0, 1);
   playRound.setMark(1, 1);
   playRound.setMark(0, 0);
+  playRound.setMark(2, 1);
+  playRound.setMark(1, 0);
+  playRound.setMark(2, 2);
   playRound.setMark(2, 0);
 
   console.log(board);
