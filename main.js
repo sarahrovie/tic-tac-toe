@@ -78,11 +78,11 @@ function gameState(board) {
           board[1],
           board[board.length - 1]
         );
-      }
 
-      // Check for column match
-      if (checkBoard.checkColumn(board[i], board[i + 1], j)) {
-        gameOver = checkBoard.checkColumn(board[i], board[i + 2], j);
+        // Check for column match
+        if (checkBoard.checkColumn(board[i], board[i + 1], j)) {
+          gameOver = checkBoard.checkColumn(board[i], board[i + 2], j);
+        }
       }
     }
   }
@@ -103,52 +103,41 @@ const playRound = (function () {
     if (board[row][column] === 0) {
       board[row][column] = mark;
       lastMark = mark;
-      console.log(lastMark);
+      const checkGame = gameState(board);
+
+      if (checkGame.getState()) {
+        console.log('Game over!');
+      }
     } else {
       console.log('Player already picked that square!');
     }
   };
-
-  return { setMark };
+  return { setMark, lastMark };
 })();
 
 // Create function to control state of the game
 function gameController() {
-  const board = Gameboard.getBoard();
+  renderDom.renderBoard();
 
   const playerOne = createPlayer('X');
   const playerTwo = createPlayer('O');
-
-  playRound.setMark(0, 2);
-  playRound.setMark(0, 1);
-  playRound.setMark(1, 1);
-  playRound.setMark(0, 0);
-  playRound.setMark(2, 1);
-  playRound.setMark(1, 0);
-  playRound.setMark(2, 2);
-  playRound.setMark(2, 0);
-
-  console.log(board);
-  const checkGame = gameState(board);
-
-  if (checkGame.getState()) {
-    console.log('Game is over!');
-  }
-
-  renderDom.renderBoard(board);
 }
 
 const renderDom = (function () {
-  // const board = Gameboard.getBoard();
+  const board = Gameboard.getBoard();
   const gridDiv = document.querySelector('#grid');
 
-  const renderBoard = (board) => {
+  const renderBoard = () => {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         const cellDiv = document.createElement('div');
-        cellDiv.innerHTML = board[i][j] === 0 ? ' ' : `${board[i][j]}`;
         cellDiv.classList.add('grid-cell');
         gridDiv.appendChild(cellDiv);
+
+        cellDiv.addEventListener('click', () => {
+          playRound.setMark(i, j);
+          cellDiv.innerHTML = board[i][j];
+        });
       }
     }
   };
