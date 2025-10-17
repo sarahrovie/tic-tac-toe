@@ -56,7 +56,6 @@ function gameState(board) {
   // Check for row match on every row
   for (let i = 0; i < 3; i++) {
     if (gameOver) {
-      gameOver = false;
       break;
     }
 
