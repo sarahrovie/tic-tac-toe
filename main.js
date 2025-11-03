@@ -47,10 +47,12 @@ const checkBoard = (function () {
 
 function gameState(board) {
   let gameOver = false;
+  let tie = false;
+  let result = '';
 
   // Check for ties
   if (checkBoard.checkTie(board) && gameOver === false) {
-    console.log("It's a tie!");
+    tie = true;
   }
 
   // Check for row match on every row
@@ -87,14 +89,23 @@ function gameState(board) {
   }
 
   const getState = () => gameOver;
+  const getResult = () => {
+    if (tie) {
+      result = "It's a tie!";
+    } else if (!tie && gameOver) {
+      result = 'Game over!';
+    }
+    return result;
+  };
 
-  return { getState };
+  return { getState, getResult };
 }
 
 // Create function that plays a round the game
 const playRound = (function () {
   const board = Gameboard.getBoard();
   let lastMark;
+  let result = '';
 
   const setMark = (row, column) => {
     lastMark === 'O' || !lastMark ? (mark = 'X') : (mark = 'O');
@@ -105,13 +116,18 @@ const playRound = (function () {
       const checkGame = gameState(board);
 
       if (checkGame.getState()) {
-        console.log('Game over!');
+        result = checkGame.getResult();
+        winner = lastMark;
       }
     } else {
-      console.log('Player already picked that square!');
+      result = 'Player already picked that square!';
     }
   };
-  return { setMark, lastMark };
+
+  const getResult = () => result;
+  const getWinner = () => winner;
+
+  return { setMark, getResult, getWinner };
 })();
 
 // Create function to control state of the game
@@ -125,6 +141,7 @@ function gameController() {
 const renderDom = (function () {
   const board = Gameboard.getBoard();
   const gridDiv = document.querySelector('#grid');
+  const result = document.querySelector('#result');
 
   const renderBoard = () => {
     for (let i = 0; i < 3; i++) {
@@ -136,6 +153,7 @@ const renderDom = (function () {
         cellDiv.addEventListener('click', () => {
           playRound.setMark(i, j);
           cellDiv.innerHTML = board[i][j];
+          result.innerHTML = playRound.getResult();
         });
       }
     }
