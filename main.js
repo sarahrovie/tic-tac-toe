@@ -57,6 +57,7 @@ function gameState(board) {
   // Check for ties
   if (checkBoard.checkTie(board) && gameOver === false) {
     tie = true;
+    gameOver = true;
   }
 
   // Check for row match on every row
