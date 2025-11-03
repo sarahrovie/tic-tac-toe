@@ -17,6 +17,10 @@ const Gameboard = (function () {
   return { getBoard };
 })();
 
+const resetGame = () => {
+  window.location.reload();
+};
+
 // Create player object with corresponding symbol
 function createPlayer(symbol) {
   const playerSymbol = symbol;
@@ -111,6 +115,12 @@ const playRound = (function () {
     lastMark === 'O' || !lastMark ? (mark = 'X') : (mark = 'O');
 
     if (board[row][column] === 0) {
+      // Reload window to reset game if game is over
+      if (result !== '') {
+        mark = '';
+        resetGame();
+      }
+
       board[row][column] = mark;
       lastMark = mark;
       const checkGame = gameState(board);
