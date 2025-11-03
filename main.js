@@ -131,7 +131,7 @@ const playRound = (function () {
         winner = lastMark;
       }
     } else {
-      result = 'Player already picked that square!';
+      alert('Player already picked that square!');
     }
   };
 
@@ -153,6 +153,7 @@ const renderDom = (function () {
   const board = Gameboard.getBoard();
   const gridDiv = document.querySelector('#grid');
   const result = document.querySelector('#result');
+  const winner = document.querySelector('#winner');
 
   const renderBoard = () => {
     for (let i = 0; i < 3; i++) {
