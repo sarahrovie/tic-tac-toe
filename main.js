@@ -174,6 +174,7 @@ const playRound = (function () {
 // Create function to control state of the game
 function gameController() {
   renderDom.renderBoard();
+  renderDom.renderScore();
 
   console.log(startGame.players);
 }
@@ -184,6 +185,7 @@ const renderDom = (function () {
   const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
 
+  // Render result message and winner
   const renderResults = () => {
     resultMessage = playRound.getResult();
     winnerMessage = playRound.getWinner();
@@ -192,13 +194,21 @@ const renderDom = (function () {
     winner.innerHTML = winnerMessage;
   };
 
-  // const renderScore = () => {
-  //   const players = startGame.players;
+  // Render each player score
+  const renderScore = () => {
+    const players = startGame.players;
 
-  //   players.forEach((player) => {
-  //     score.innerHTML += `${player.name}: ${player.getScore()} `;
-  //   });
-  // }
+    if (players) {
+      const playerOne = players[0];
+      const playerTwo = players[1];
+      score.innerHTML = `${playerOne.name}: ${playerOne.getScore()} - 
+      ${playerTwo.name}: ${playerTwo.getScore()}`;
+    }
+
+    // players.forEach((player) => {
+    //   score.innerHTML += `${player.name}: ${player.getScore()} `;
+    // });
+  };
 
   const renderBoard = () => {
     for (let i = 0; i < 3; i++) {
@@ -214,12 +224,13 @@ const renderDom = (function () {
           if (playRound.getResult() && playRound.getWinner()) {
             renderResults();
           }
+          renderScore();
         });
       }
     }
   };
 
-  return { renderBoard };
+  return { renderBoard, renderScore };
 })();
 
 gameController();
