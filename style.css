@@ -26,12 +26,14 @@ main {
 }
 
 #grid {
+  position: relative;
   display: grid;
   background-color: lightblue;
   grid-template: repeat(3, 100px) / repeat(3, 100px);
   align-items: stretch;
   background-color: black;
   gap: 2px;
+  z-index: 1;
 }
 
 .grid-cell {
@@ -40,4 +42,27 @@ main {
   align-items: center;
   font-size: 2rem;
   background-color: white;
+}
+
+#overlay {
+  background-color: rgba(255, 255, 255, 0.623);
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+}
+
+#reset-btn {
+  font-size: 1.3rem;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+}
+
+#results {
+  margin-top: 20px;
+  width: 200px;
 }

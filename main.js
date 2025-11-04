@@ -18,7 +18,18 @@ const Gameboard = (function () {
 })();
 
 const resetGame = () => {
-  window.location.reload();
+  const board = Gameboard.getBoard();
+  const gridDiv = document.querySelector('#grid');
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      board[i][j] = 0;
+    }
+  }
+
+  // gridDiv.innerHTML = '';
+
+  // renderDom.renderBoard();
 };
 
 // Create player object with corresponding symbol
@@ -150,12 +161,6 @@ const playRound = (function () {
     lastSymbol === 'O' || !lastSymbol ? (symbol = 'X') : (symbol = 'O');
 
     if (board[row][column] === 0) {
-      // Reload window to reset game if game is over
-      if (result !== '') {
-        symbol = '';
-        resetGame();
-      }
-
       board[row][column] = symbol;
       lastSymbol = symbol;
 
@@ -181,7 +186,9 @@ function gameController() {
 
 const renderDom = (function () {
   const board = Gameboard.getBoard();
+
   const gridDiv = document.querySelector('#grid');
+  const overlayDiv = document.querySelector('#overlay');
   const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
 
@@ -223,6 +230,7 @@ const renderDom = (function () {
 
           if (playRound.getResult() && playRound.getWinner()) {
             renderResults();
+            overlayDiv.style.display = 'flex';
           }
           renderScore();
         });
