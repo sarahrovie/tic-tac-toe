@@ -22,12 +22,13 @@ const resetGame = () => {
 };
 
 // Create player object with corresponding symbol
-function createPlayer(symbol) {
-  const playerSymbol = symbol;
+function createPlayer(symbol, name) {
+  let score = 0;
 
-  const getMark = () => playerSymbol;
+  const getScore = () => score;
+  const increaseScore = () => score++;
 
-  return { getMark };
+  return { name, symbol, getScore, increaseScore };
 }
 
 const checkBoard = (function () {
@@ -96,7 +97,7 @@ function gameState(board) {
   const getState = () => gameOver;
   const getResult = () => {
     if (tie) {
-      result = "It's a tie!";
+      result = 'Tie!';
     } else if (!tie && gameOver) {
       result = 'Game over!';
     }
@@ -106,30 +107,59 @@ function gameState(board) {
   return { getState, getResult };
 }
 
+// Create function that starts game and stores players scores and names
+const startGame = (function () {
+  let players = [];
+
+  const playerOne = createPlayer('X', 'Dan');
+  const playerTwo = createPlayer('O', 'Phil');
+
+  players.push(playerOne, playerTwo);
+
+  return { players };
+})();
+
 // Create function that plays a round the game
 const playRound = (function () {
   const board = Gameboard.getBoard();
-  let lastMark;
+  let lastSymbol;
   let result = '';
+  let winner = '';
 
-  const setMark = (row, column) => {
-    lastMark === 'O' || !lastMark ? (mark = 'X') : (mark = 'O');
+  // Checks for a winner each round
+  const checkForWin = () => {
+    const checkGame = gameState(board);
+
+    if (checkGame.getState()) {
+      result = checkGame.getResult();
+
+      if (result === 'Tie!') {
+        winner = 'Both players win :)';
+      } else {
+        winner = lastSymbol;
+        players = startGame.players;
+
+        const winnerPlayer = players.find((player) => player.symbol === winner);
+        winnerPlayer.increaseScore();
+        winner = `Player ${winnerPlayer.name} wins`;
+      }
+    }
+  };
+
+  const setSymbol = (row, column) => {
+    lastSymbol === 'O' || !lastSymbol ? (symbol = 'X') : (symbol = 'O');
 
     if (board[row][column] === 0) {
       // Reload window to reset game if game is over
       if (result !== '') {
-        mark = '';
+        symbol = '';
         resetGame();
       }
 
-      board[row][column] = mark;
-      lastMark = mark;
-      const checkGame = gameState(board);
+      board[row][column] = symbol;
+      lastSymbol = symbol;
 
-      if (checkGame.getState()) {
-        result = checkGame.getResult();
-        winner = lastMark;
-      }
+      checkForWin();
     } else {
       alert('Player already picked that square!');
     }
@@ -138,15 +168,14 @@ const playRound = (function () {
   const getResult = () => result;
   const getWinner = () => winner;
 
-  return { setMark, getResult, getWinner };
+  return { setSymbol, getResult, getWinner };
 })();
 
 // Create function to control state of the game
 function gameController() {
   renderDom.renderBoard();
 
-  const playerOne = createPlayer('X');
-  const playerTwo = createPlayer('O');
+  console.log(startGame.players);
 }
 
 const renderDom = (function () {
@@ -154,6 +183,22 @@ const renderDom = (function () {
   const gridDiv = document.querySelector('#grid');
   const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
+
+  const renderResults = () => {
+    resultMessage = playRound.getResult();
+    winnerMessage = playRound.getWinner();
+
+    result.innerHTML = resultMessage;
+    winner.innerHTML = winnerMessage;
+  };
+
+  // const renderScore = () => {
+  //   const players = startGame.players;
+
+  //   players.forEach((player) => {
+  //     score.innerHTML += `${player.name}: ${player.getScore()} `;
+  //   });
+  // }
 
   const renderBoard = () => {
     for (let i = 0; i < 3; i++) {
@@ -163,9 +208,12 @@ const renderDom = (function () {
         gridDiv.appendChild(cellDiv);
 
         cellDiv.addEventListener('click', () => {
-          playRound.setMark(i, j);
+          playRound.setSymbol(i, j);
           cellDiv.innerHTML = board[i][j];
-          result.innerHTML = playRound.getResult();
+
+          if (playRound.getResult() && playRound.getWinner()) {
+            renderResults();
+          }
         });
       }
     }
