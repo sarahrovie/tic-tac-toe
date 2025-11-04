@@ -55,7 +55,7 @@ main {
   z-index: 2;
 }
 
-#reset-btn {
+#overlay button {
   font-size: 1.3rem;
   font-weight: bold;
   background-color: transparent;

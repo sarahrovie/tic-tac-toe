@@ -17,21 +17,6 @@ const Gameboard = (function () {
   return { getBoard };
 })();
 
-const resetGame = () => {
-  const board = Gameboard.getBoard();
-  const gridDiv = document.querySelector('#grid');
-
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      board[i][j] = 0;
-    }
-  }
-
-  // gridDiv.innerHTML = '';
-
-  // renderDom.renderBoard();
-};
-
 // Create player object with corresponding symbol
 function createPlayer(symbol, name) {
   let score = 0;
@@ -170,10 +155,15 @@ const playRound = (function () {
     }
   };
 
+  const endRound = () => {
+    result = '';
+    winner = '';
+  };
+
   const getResult = () => result;
   const getWinner = () => winner;
 
-  return { setSymbol, getResult, getWinner };
+  return { setSymbol, getResult, getWinner, endRound };
 })();
 
 // Create function to control state of the game
@@ -188,9 +178,30 @@ const renderDom = (function () {
   const board = Gameboard.getBoard();
 
   const gridDiv = document.querySelector('#grid');
-  const overlayDiv = document.querySelector('#overlay');
   const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
+
+  // Render overlay with rety button to restart game
+  const renderOverlay = () => {
+    const overlayDiv = document.createElement('div');
+    overlayDiv.setAttribute('id', 'overlay');
+
+    const resetBtn = document.createElement('button');
+    resetBtn.textContent = 'Retry?';
+    overlayDiv.appendChild(resetBtn);
+
+    resetBtn.addEventListener('click', () => {
+      resetGame();
+
+      renderBoard();
+      playRound.endRound();
+      result.innerHTML = '';
+      winner.innerHTML = '';
+    });
+
+    overlayDiv.style.display = 'flex';
+    gridDiv.appendChild(overlayDiv);
+  };
 
   // Render result message and winner
   const renderResults = () => {
@@ -230,7 +241,7 @@ const renderDom = (function () {
 
           if (playRound.getResult() && playRound.getWinner()) {
             renderResults();
-            overlayDiv.style.display = 'flex';
+            renderOverlay();
           }
           renderScore();
         });
@@ -240,5 +251,19 @@ const renderDom = (function () {
 
   return { renderBoard, renderScore };
 })();
+
+const resetGame = () => {
+  const board = Gameboard.getBoard();
+  const gridDiv = document.querySelector('#grid');
+  const overlayDiv = document.querySelector('#overlay');
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      board[i][j] = 0;
+    }
+  }
+
+  gridDiv.innerHTML = '';
+};
 
 gameController();
