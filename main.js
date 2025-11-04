@@ -55,12 +55,6 @@ function gameState(board) {
   let tie = false;
   let result = '';
 
-  // Check for ties
-  if (checkBoard.checkTie(board) && gameOver === false) {
-    tie = true;
-    gameOver = true;
-  }
-
   // Check for row match on every row
   for (let i = 0; i < 3; i++) {
     if (gameOver) {
@@ -92,6 +86,12 @@ function gameState(board) {
         }
       }
     }
+  }
+
+  // Check for ties
+  if (checkBoard.checkTie(board) && gameOver === false) {
+    tie = true;
+    gameOver = true;
   }
 
   const getState = () => gameOver;
