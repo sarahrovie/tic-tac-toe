@@ -93,9 +93,9 @@ function gameState(board) {
   const getState = () => gameOver;
   const getResult = () => {
     if (tie) {
-      result = 'Tie!';
+      result = 'Tie';
     } else if (!tie && gameOver) {
-      result = 'Game over!';
+      result = 'Game Over';
     }
     return result;
   };
@@ -134,7 +134,6 @@ const startGame = (function () {
 const playRound = (function () {
   const board = Gameboard.getBoard();
   let lastSymbol;
-  let result = '';
   let winner = '';
 
   // Checks for a winner each round
@@ -144,15 +143,15 @@ const playRound = (function () {
     if (checkGame.getState()) {
       result = checkGame.getResult();
 
-      if (result === 'Tie!') {
-        winner = 'Both players win :)';
+      if (result === 'Tie') {
+        winner = 'Both players win!';
       } else {
         winner = lastSymbol;
         players = startGame.players;
 
         const winnerPlayer = players.find((player) => player.symbol === winner);
         winnerPlayer.increaseScore();
-        winner = `${winnerPlayer.name} wins`;
+        winner = `${winnerPlayer.name} wins!`;
       }
     }
   };
@@ -171,7 +170,6 @@ const playRound = (function () {
   };
 
   const endRound = () => {
-    result = '';
     winner = '';
   };
 
@@ -184,17 +182,12 @@ const playRound = (function () {
 // Create function to control state of the game
 function gameController() {
   const startBtn = document.querySelector('#start-btn');
-  const gridDiv = document.querySelector('#grid');
   renderDom.renderBoard();
 
   startBtn.addEventListener('click', () => {
     startGame.createPlayers();
-
-    // console.log(startGame.players);
-    // console.log(startGame.getGameStart());
-    renderDom.renderPlayers();
-
     startBtn.style.visibility = 'hidden';
+    renderDom.renderPlayers();
   });
 }
 
@@ -202,9 +195,7 @@ const renderDom = (function () {
   const board = Gameboard.getBoard();
 
   const gridDiv = document.querySelector('#grid');
-  const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
-  const startBtn = document.querySelector('#start-btn');
 
   // Render overlay with retry button to restart game
   const renderOverlay = () => {
@@ -212,7 +203,8 @@ const renderDom = (function () {
     overlayDiv.setAttribute('id', 'overlay');
 
     const resetBtn = document.createElement('button');
-    resetBtn.textContent = 'Retry?';
+    resetBtn.setAttribute('class', 'btn');
+    resetBtn.textContent = 'Try again?';
     overlayDiv.appendChild(resetBtn);
 
     resetBtn.addEventListener('click', () => {
@@ -220,7 +212,6 @@ const renderDom = (function () {
 
       renderBoard();
       playRound.endRound();
-      result.innerHTML = '';
       winner.innerHTML = '';
     });
 
@@ -228,12 +219,10 @@ const renderDom = (function () {
     gridDiv.appendChild(overlayDiv);
   };
 
-  // Render result message and winner
+  // Render result message
   const renderResults = () => {
-    resultMessage = playRound.getResult();
     winnerMessage = playRound.getWinner();
 
-    result.innerHTML = resultMessage;
     winner.innerHTML = winnerMessage;
   };
 
@@ -247,6 +236,7 @@ const renderDom = (function () {
 
       inputP1 = document.querySelector('#player1');
       scoreP1 = document.querySelector('#player1-score');
+
       inputP2 = document.querySelector('#player2');
       scoreP2 = document.querySelector('#player2-score');
 
@@ -291,7 +281,6 @@ const renderDom = (function () {
 const resetGame = () => {
   const board = Gameboard.getBoard();
   const gridDiv = document.querySelector('#grid');
-  const overlayDiv = document.querySelector('#overlay');
 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
