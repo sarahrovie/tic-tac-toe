@@ -34,10 +34,10 @@ main {
 #grid {
   position: relative;
   display: none;
-  grid-template: repeat(3, 99px) / repeat(3, 99px);
+  grid-template: repeat(3, 100px) / repeat(3, 100px);
   align-items: stretch;
   background-color: #20b2aa;
-  gap: 2px;
+  gap: 3px;
   z-index: 1;
 }
 
@@ -46,12 +46,20 @@ main {
   justify-content: center;
   align-items: center;
   font-size: 2rem;
-  background-color: lightcyan;
+  background-color: #e0ffff;
 }
 
-/* .grid-cell .active:hover {
-  background-color: rgba(224, 255, 255, 0.829);
-} */
+.grid-cell svg {
+  width: 40px;
+}
+
+svg#x {
+  width: 50px;
+}
+
+.grid-cell:hover {
+  background-color: rgba(224, 255, 255, 0.849);
+}
 
 #players {
   display: flex;
