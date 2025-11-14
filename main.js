@@ -104,16 +104,24 @@ function gameState(board) {
 }
 
 // Create function that starts game and stores players scores and names
-const startGame = (function () {
+function startGame() {
+  let playerOneValue = document.getElementById('player1').value;
+  let playerTwoValue = document.getElementById('player2').value;
   let players = [];
 
-  const playerOne = createPlayer('X', 'Dan');
-  const playerTwo = createPlayer('O', 'Phil');
+  const playerOne = createPlayer(
+    'X',
+    !playerOneValue ? 'Player 1' : playerOneValue
+  );
+  const playerTwo = createPlayer(
+    'O',
+    !playerTwoValue ? 'Player 2' : playerTwoValue
+  );
 
   players.push(playerOne, playerTwo);
 
   return { players };
-})();
+}
 
 // Create function that plays a round the game
 const playRound = (function () {
@@ -168,20 +176,27 @@ const playRound = (function () {
 
 // Create function to control state of the game
 function gameController() {
-  renderDom.renderBoard();
-  renderDom.renderScore();
+  // window.addEventListener('DOMContentLoaded', ()=> {})
+  const startBtn = document.querySelector('#start-btn');
 
-  console.log(startGame.players);
+  startBtn.addEventListener('click', (e) => {
+    const gameStart = startGame();
+    console.log(gameStart.players);
+  });
+  // renderDom.renderBoard();
+  // renderDom.renderScore();
+
+  // console.log(startGame.players);
 }
 
 const renderDom = (function () {
   const board = Gameboard.getBoard();
 
-  const gridDiv = document.querySelector('#grid');
+  const gridDiv = document.createElement('div');
   const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
 
-  // Render overlay with rety button to restart game
+  // Render overlay with retry button to restart game
   const renderOverlay = () => {
     const overlayDiv = document.createElement('div');
     overlayDiv.setAttribute('id', 'overlay');

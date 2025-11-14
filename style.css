@@ -25,6 +25,15 @@ main {
   height: 90%;
 }
 
+#start {
+  display: flex;
+  height: 20rem;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  aspect-ratio: 1/1;
+}
+
 #grid {
   position: relative;
   display: grid;
