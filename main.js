@@ -106,6 +106,7 @@ function gameState(board) {
 // Create function that starts game and stores players scores and names
 const startGame = (function () {
   let players = [];
+  let gameStart = false;
 
   const createPlayers = () => {
     let playerOneValue = document.getElementById('player1').value;
@@ -121,9 +122,12 @@ const startGame = (function () {
     );
 
     players.push(playerOne, playerTwo);
+    gameStart = true;
   };
 
-  return { createPlayers, players };
+  const getGameStart = () => gameStart;
+
+  return { createPlayers, players, getGameStart };
 })();
 
 // Create function that plays a round the game
@@ -148,7 +152,7 @@ const playRound = (function () {
 
         const winnerPlayer = players.find((player) => player.symbol === winner);
         winnerPlayer.increaseScore();
-        winner = `Player ${winnerPlayer.name} wins`;
+        winner = `${winnerPlayer.name} wins`;
       }
     }
   };
@@ -179,18 +183,18 @@ const playRound = (function () {
 
 // Create function to control state of the game
 function gameController() {
-  const startDiv = document.querySelector('#start-div');
   const startBtn = document.querySelector('#start-btn');
+  const gridDiv = document.querySelector('#grid');
+  renderDom.renderBoard();
 
   startBtn.addEventListener('click', () => {
     startGame.createPlayers();
 
-    console.log(startGame.players);
+    // console.log(startGame.players);
+    // console.log(startGame.getGameStart());
+    renderDom.renderPlayers();
 
-    startDiv.style.display = 'none';
-
-    renderDom.renderBoard();
-    renderDom.renderScore();
+    startBtn.style.visibility = 'hidden';
   });
 }
 
@@ -200,6 +204,7 @@ const renderDom = (function () {
   const gridDiv = document.querySelector('#grid');
   const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
+  const startBtn = document.querySelector('#start-btn');
 
   // Render overlay with retry button to restart game
   const renderOverlay = () => {
@@ -233,14 +238,23 @@ const renderDom = (function () {
   };
 
   // Render each player score
-  const renderScore = () => {
+  const renderPlayers = () => {
     const players = startGame.players;
 
     if (players) {
       const playerOne = players[0];
       const playerTwo = players[1];
-      score.innerHTML = `${playerOne.name}: ${playerOne.getScore()} - 
-      ${playerTwo.name}: ${playerTwo.getScore()}`;
+
+      inputP1 = document.querySelector('#player1');
+      scoreP1 = document.querySelector('#player1-score');
+      inputP2 = document.querySelector('#player2');
+      scoreP2 = document.querySelector('#player2-score');
+
+      inputP1.readOnly = true;
+      inputP2.readOnly = true;
+
+      scoreP1.innerHTML = `${playerOne.getScore()}`;
+      scoreP2.innerHTML = `${playerTwo.getScore()}`;
     }
   };
 
@@ -254,20 +268,24 @@ const renderDom = (function () {
         gridDiv.appendChild(cellDiv);
 
         cellDiv.addEventListener('click', () => {
-          playRound.setSymbol(i, j);
-          cellDiv.innerHTML = board[i][j];
+          if (startGame.getGameStart()) {
+            playRound.setSymbol(i, j);
+            cellDiv.innerHTML = board[i][j];
 
-          if (playRound.getResult() && playRound.getWinner()) {
-            renderResults();
-            renderOverlay();
+            if (playRound.getResult() && playRound.getWinner()) {
+              renderResults();
+              renderOverlay();
+            }
+            renderPlayers();
+          } else {
+            alert('Please start game first!');
           }
-          renderScore();
         });
       }
     }
   };
 
-  return { renderBoard, renderScore };
+  return { renderBoard, renderPlayers };
 })();
 
 const resetGame = () => {

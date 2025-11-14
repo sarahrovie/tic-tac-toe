@@ -14,20 +14,38 @@
     </header>
     <main>
       <div id="grid"></div>
-      <div id="start-div">
-        <form>
-          <label for="player1">Player 1</label>
-          <input type="text" name="player1" id="player1" />
+      <div id="players">
+        <form id="player-form">
+          <!-- <label for="player1">Player 1</label> -->
+          <div class="player-info" id="p1-div">
+            <input
+              type="text"
+              name="player1"
+              id="player1"
+              placeholder="Player 1" />
+            <div class="score">
+              <p id="player1-score">-</p>
+            </div>
+          </div>
           <br />
-          <label for="player2">Player 2</label>
-          <input type="text" name="player2" id="player2" />
+          <!-- <label for="player2">Player 2</label> -->
+          <div class="player-info" id="p2-div">
+            <input
+              type="text"
+              name="player2"
+              id="player2"
+              placeholder="Player 2" />
+            <div class="score">
+              <p id="player2-score">-</p>
+            </div>
+          </div>
         </form>
-        <button id="start-btn">Start!</button>
+        <button id="start-btn">Start</button>
       </div>
       <div id="results">
         <p id="result"></p>
         <p id="winner"></p>
-        <p id="score"></p>
+        <!-- <p id="score"></p> -->
       </div>
     </main>
   </body>
