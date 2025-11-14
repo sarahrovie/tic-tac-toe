@@ -25,7 +25,7 @@ main {
   height: 90%;
 }
 
-#start {
+#start-div {
   display: flex;
   height: 20rem;
   flex-direction: column;
@@ -36,7 +36,7 @@ main {
 
 #grid {
   position: relative;
-  display: grid;
+  display: none;
   background-color: lightblue;
   grid-template: repeat(3, 100px) / repeat(3, 100px);
   align-items: stretch;

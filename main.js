@@ -104,24 +104,27 @@ function gameState(board) {
 }
 
 // Create function that starts game and stores players scores and names
-function startGame() {
-  let playerOneValue = document.getElementById('player1').value;
-  let playerTwoValue = document.getElementById('player2').value;
+const startGame = (function () {
   let players = [];
 
-  const playerOne = createPlayer(
-    'X',
-    !playerOneValue ? 'Player 1' : playerOneValue
-  );
-  const playerTwo = createPlayer(
-    'O',
-    !playerTwoValue ? 'Player 2' : playerTwoValue
-  );
+  const createPlayers = () => {
+    let playerOneValue = document.getElementById('player1').value;
+    let playerTwoValue = document.getElementById('player2').value;
 
-  players.push(playerOne, playerTwo);
+    const playerOne = createPlayer(
+      'X',
+      playerOneValue === '' ? 'Player 1' : playerOneValue
+    );
+    const playerTwo = createPlayer(
+      'O',
+      playerTwoValue === '' ? 'Player 2' : playerTwoValue
+    );
 
-  return { players };
-}
+    players.push(playerOne, playerTwo);
+  };
+
+  return { createPlayers, players };
+})();
 
 // Create function that plays a round the game
 const playRound = (function () {
@@ -176,23 +179,25 @@ const playRound = (function () {
 
 // Create function to control state of the game
 function gameController() {
-  // window.addEventListener('DOMContentLoaded', ()=> {})
+  const startDiv = document.querySelector('#start-div');
   const startBtn = document.querySelector('#start-btn');
 
-  startBtn.addEventListener('click', (e) => {
-    const gameStart = startGame();
-    console.log(gameStart.players);
-  });
-  // renderDom.renderBoard();
-  // renderDom.renderScore();
+  startBtn.addEventListener('click', () => {
+    startGame.createPlayers();
 
-  // console.log(startGame.players);
+    console.log(startGame.players);
+
+    startDiv.style.display = 'none';
+
+    renderDom.renderBoard();
+    renderDom.renderScore();
+  });
 }
 
 const renderDom = (function () {
   const board = Gameboard.getBoard();
 
-  const gridDiv = document.createElement('div');
+  const gridDiv = document.querySelector('#grid');
   const result = document.querySelector('#result');
   const winner = document.querySelector('#winner');
 
@@ -237,13 +242,11 @@ const renderDom = (function () {
       score.innerHTML = `${playerOne.name}: ${playerOne.getScore()} - 
       ${playerTwo.name}: ${playerTwo.getScore()}`;
     }
-
-    // players.forEach((player) => {
-    //   score.innerHTML += `${player.name}: ${player.getScore()} `;
-    // });
   };
 
   const renderBoard = () => {
+    gridDiv.style.display = 'grid';
+
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         const cellDiv = document.createElement('div');
