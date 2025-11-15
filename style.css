@@ -34,9 +34,8 @@ main {
   position: relative;
   display: grid;
   grid-template: repeat(3, 100px) / repeat(3, 100px);
-  align-items: stretch;
   background-color: #20b2aa;
-  gap: 3px;
+  gap: 0.4rem;
   z-index: 1;
 }
 
