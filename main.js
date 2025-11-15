@@ -173,9 +173,8 @@ const playRound = (function () {
 
   const getResult = () => result;
   const getWinner = () => winner;
-  const getError = () => error;
 
-  return { setSymbol, getResult, getWinner, endRound, getError };
+  return { setSymbol, getResult, getWinner, endRound };
 })();
 
 // Create function to control state of the game
@@ -214,7 +213,7 @@ const renderDom = (function () {
     overlayDiv.appendChild(resetBtn);
 
     resetBtn.addEventListener('click', () => {
-      resetGame();
+      restartGame();
 
       renderBoard();
       playRound.endRound();
@@ -307,7 +306,7 @@ const renderDom = (function () {
   return { renderBoard, renderPlayers };
 })();
 
-const resetGame = () => {
+const restartGame = () => {
   const board = Gameboard.getBoard();
   const gridDiv = document.querySelector('#grid');
 

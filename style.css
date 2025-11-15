@@ -127,11 +127,6 @@ div.score {
   background-color: #14968f;
 }
 
-.btn:active {
-  background-color: #fff;
-  color: #20b2aa;
-}
-
 div#results {
   color: #c40093;
   font-size: 1.2rem;
