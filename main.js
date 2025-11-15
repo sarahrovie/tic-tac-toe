@@ -144,14 +144,14 @@ const playRound = (function () {
       result = checkGame.getResult();
 
       if (result === 'Tie') {
-        winner = 'Both players win!';
+        winner = 'Draw!';
       } else {
         winner = lastSymbol;
         players = startGame.players;
 
         const winnerPlayer = players.find((player) => player.symbol === winner);
         winnerPlayer.increaseScore();
-        winner = `${winnerPlayer.name} wins!`;
+        winner = `Winner: ${winnerPlayer.name}!`;
       }
     }
   };
