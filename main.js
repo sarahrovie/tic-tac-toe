@@ -164,8 +164,6 @@ const playRound = (function () {
       lastSymbol = symbol;
 
       checkForWin();
-    } else {
-      alert('Player already picked that square!');
     }
   };
 
@@ -175,16 +173,23 @@ const playRound = (function () {
 
   const getResult = () => result;
   const getWinner = () => winner;
+  const getError = () => error;
 
-  return { setSymbol, getResult, getWinner, endRound };
+  return { setSymbol, getResult, getWinner, endRound, getError };
 })();
 
 // Create function to control state of the game
 function gameController() {
-  const startBtn = document.querySelector('#start-btn');
   renderDom.renderBoard();
 
+  const startBtn = document.querySelector('#start-btn');
+  const errorP = document.querySelector('#error');
+
   startBtn.addEventListener('click', () => {
+    if (errorP.textContent !== '') {
+      errorP.textContent = '';
+    }
+
     startGame.createPlayers();
     startBtn.style.visibility = 'hidden';
     renderDom.renderPlayers();
@@ -196,6 +201,7 @@ const renderDom = (function () {
 
   const gridDiv = document.querySelector('#grid');
   const winner = document.querySelector('#winner');
+  const errorP = document.querySelector('#error');
 
   // Render overlay with retry button to restart game
   const renderOverlay = () => {
@@ -217,6 +223,10 @@ const renderDom = (function () {
 
     overlayDiv.style.display = 'flex';
     gridDiv.appendChild(overlayDiv);
+  };
+
+  const renderError = (errorMessage) => {
+    errorP.textContent = errorMessage;
   };
 
   // Render result message
@@ -249,7 +259,17 @@ const renderDom = (function () {
   };
 
   const renderBoard = () => {
-    gridDiv.style.display = 'grid';
+    const player1Svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="x">
+      <title>close</title>
+      <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+    </svg>
+    `;
+    const player2Svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+    </svg>
+    `;
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
@@ -258,25 +278,14 @@ const renderDom = (function () {
         gridDiv.appendChild(cellDiv);
 
         cellDiv.addEventListener('click', () => {
-          if (startGame.getGameStart()) {
+          if (startGame.getGameStart() && cellDiv.innerHTML === '') {
+            errorP.textContent = '';
+
             playRound.setSymbol(i, j);
 
             if (board[i][j] === 'X') {
-              const player1Svg = `
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="x">
-                <title>close</title>
-                <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-              </svg>
-              `;
-
               cellDiv.innerHTML += player1Svg;
             } else if (board[i][j] === 'O') {
-              const player2Svg = `
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-              </svg>
-              `;
-
               cellDiv.innerHTML += player2Svg;
             }
 
@@ -285,8 +294,10 @@ const renderDom = (function () {
               renderOverlay();
             }
             renderPlayers();
-          } else {
-            alert('Please start game first!');
+          } else if (!startGame.getGameStart()) {
+            renderError('Click "start" to play!');
+          } else if (cellDiv.innerHTML !== '') {
+            renderError('Pick another square!');
           }
         });
       }

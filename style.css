@@ -20,7 +20,6 @@ body {
 
 h1 {
   color: #20b2aa;
-  text-shadow: 4px 0px #fff;
 }
 
 main {
@@ -33,7 +32,7 @@ main {
 
 #grid {
   position: relative;
-  display: none;
+  display: grid;
   grid-template: repeat(3, 100px) / repeat(3, 100px);
   align-items: stretch;
   background-color: #20b2aa;
@@ -76,21 +75,32 @@ form#player-form {
   width: 400px;
 }
 
-#player-form input {
-  font-size: 1rem;
-  width: 100px;
-  height: 2rem;
-  padding: 5px;
-  border: 1px solid #000;
-  border-radius: 5px;
-}
-
 #player-form input:read-only {
   pointer-events: none;
 }
 
 #player-form input:read-only::placeholder {
   color: #000;
+}
+
+#player-form input {
+  font-size: 1rem;
+  width: 100px;
+  padding: 5px;
+}
+
+#player-form input:focus,
+#player-form input:hover {
+  outline: none;
+  border: 2px solid #c40093;
+}
+
+#player-form input,
+div.score {
+  background-color: #fff;
+  height: 2rem;
+  border: 2px solid #20b2aa;
+  border-radius: 5px;
 }
 
 div.player-info {
@@ -100,11 +110,7 @@ div.player-info {
 }
 
 div.score {
-  background-color: #fff;
   width: 50px;
-  height: 2rem;
-  border: 1px solid #000;
-  border-radius: 5px;
 }
 
 .btn {
@@ -128,6 +134,7 @@ div.score {
 }
 
 div#results {
+  color: #c40093;
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -150,4 +157,12 @@ div#results {
 
 .score {
   font-size: 1.2rem;
+}
+
+#error {
+  color: #c40093;
+  height: 1.2rem;
+  margin: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
 }
